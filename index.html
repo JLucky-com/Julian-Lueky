@@ -8,8 +8,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <style>
     :root {
       --primary: #69ba25;
@@ -26,6 +26,7 @@
       line-height: 1.6;
       background-color: var(--background);
       color: #333;
+      position: relative;
     }
 
     h1, h2, h3, h4, h5, h6, .brand-font {
@@ -61,12 +62,13 @@
     .navbar {
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       transition: all 0.3s ease;
+      background-color: rgba(105, 186, 37, 0.9);
+      backdrop-filter: blur(10px);
     }
 
     .navbar.scrolled {
-      background-color: var(--primary-dark) !important;
-      padding-top: 10px;
-      padding-bottom: 10px;
+      background-color: rgba(77, 138, 29, 0.95) !important;
+      padding: 10px 0;
     }
 
     .navbar-nav .nav-link {
@@ -74,6 +76,7 @@
       font-weight: 500;
       margin-left: 15px;
       position: relative;
+      transition: all 0.3s;
     }
 
     .navbar-nav .nav-link::after {
@@ -87,7 +90,8 @@
       transition: width 0.3s ease;
     }
 
-    .navbar-nav .nav-link:hover::after {
+    .navbar-nav .nav-link:hover::after,
+    .navbar-nav .nav-link.active::after {
       width: 100%;
     }
 
@@ -121,15 +125,24 @@
       margin-right: 15px;
       font-size: 1.2rem;
       transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: rgba(255,255,255,0.2);
     }
 
     .social-icons a:hover {
       color: var(--accent);
+      background-color: rgba(255,255,255,0.3);
       transform: translateY(-3px);
     }
 
     section {
-      padding: 80px 0;
+      padding: 100px 0;
+      position: relative;
     }
 
     .service-card {
@@ -199,12 +212,31 @@
     /* Hero Section */
     .hero {
       height: 100vh;
-      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/hero (1).jpeg') center/cover no-repeat;
+      min-height: 600px;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/hero (1).jpeg') center/cover no-repeat fixed;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background: linear-gradient(to top, var(--background), transparent);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
     }
 
     .hero h1 {
@@ -217,13 +249,15 @@
     .hero p {
       font-size: 1.5rem;
       margin-bottom: 30px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     }
 
     /* Gallery Styles */
     .gallery-section {
       background-color: var(--accent);
-      padding: 80px 0;
+      padding: 100px 0;
       text-align: center;
+      position: relative;
     }
 
     .gallery-section h2 {
@@ -297,6 +331,7 @@
       visibility: hidden;
       transition: all 0.3s;
       z-index: 999;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
 
     .back-to-top.active {
@@ -309,6 +344,25 @@
       transform: translateY(-5px);
     }
 
+    /* Parallax Effect */
+    .parallax {
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    /* Floating Animation */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .floating {
+      animation: float 3s ease-in-out infinite;
+    }
+
     /* Responsive Adjustments */
     @media (max-width: 992px) {
       .hero h1 {
@@ -316,7 +370,11 @@
       }
       
       section {
-        padding: 60px 0;
+        padding: 80px 0;
+      }
+
+      .parallax {
+        background-attachment: scroll;
       }
     }
 
@@ -337,6 +395,10 @@
       .swiper {
         height: 300px;
       }
+
+      section {
+        padding: 70px 0;
+      }
     }
 
     @media (max-width: 576px) {
@@ -345,7 +407,7 @@
       }
       
       section {
-        padding: 50px 0;
+        padding: 60px 0;
       }
       
       .footer-logo {
@@ -355,10 +417,10 @@
     }
   </style>
 </head>
-<body>
+<body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="100">
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg bg-primary-custom navbar-dark fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
   <div class="container">
     <a class="navbar-brand d-flex align-items-center" href="#">
       <img src="images/logom3.png" alt="Logo Suci Massage" class="me-2 rounded-circle"/>
@@ -382,10 +444,10 @@
 
 <!-- Hero -->
 <section class="hero">
-  <div class="container">
+  <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
     <h1 class="display-3">Relaksasi Sejati Untuk Tubuh dan Pikiran</h1>
     <p class="fs-4">Urut Capek & Kerik | Pria & Wanita</p>
-    <a href="#contact" class="btn btn-green btn-lg mt-3">Jadwalkan Pijat</a>
+    <a href="#contact" class="btn btn-green btn-lg mt-3 floating">Jadwalkan Pijat</a>
   </div>
 </section>
 
@@ -393,10 +455,10 @@
 <section id="about" class="py-5">
   <div class="container">
     <div class="row align-items-center">
-      <div class="col-lg-6 mb-4 mb-lg-0">
+      <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
         <img src="images/about.jpeg" class="img-fluid rounded shadow-lg" alt="Tentang Suci Massage">
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
         <h2 class="text-green mb-4">Tentang Kami</h2>
         <p class="lead">Suci Massage menyediakan layanan urut capek dan kerik untuk pria dan wanita dengan teknik tradisional yang telah terbukti efektif.</p>
         <p>Kami fokus pada kenyamanan dan pemulihan tubuh Anda dengan metode tradisional yang aman dan profesional. Setiap terapis kami memiliki pelatihan khusus untuk memastikan pengalaman pijat yang optimal.</p>
@@ -414,47 +476,47 @@
 <!-- Services -->
 <section id="services" class="py-5 bg-light">
   <div class="container">
-    <div class="text-center mb-5">
+    <div class="text-center mb-5" data-aos="fade-up">
       <h2 class="text-green">Layanan Kami</h2>
       <p class="lead">Berbagai layanan pijat dan perawatan tubuh untuk kebutuhan Anda</p>
     </div>
     <div class="row g-4">
-      <div class="col-md-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
         <div class="service-card">
           <img src="images/Massage.jpeg" class="our-service-img" alt="Pijat Tradisional">
           <h5>Pijat Tradisional</h5>
           <p class="px-3 pb-3 text-center">Meredakan pegal dan nyeri dengan teknik pijat tradisional</p>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
         <div class="service-card">
           <img src="images/urut.jpeg" class="our-service-img" alt="Urut">
           <h5>Urut</h5>
           <p class="px-3 pb-3 text-center">Mengatasi masalah otot dan sendi dengan teknik urut khusus</p>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
         <div class="service-card">
           <img src="images/kerik.jpeg" class="our-service-img" alt="Kerik">
           <h5>Kerik</h5>
           <p class="px-3 pb-3 text-center">Membersihkan dan merangsang sirkulasi darah dengan teknik kerik</p>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
         <div class="service-card">
           <img src="images/lulur.jpeg" class="our-service-img" alt="Lulur Badan">
           <h5>Lulur Badan</h5>
           <p class="px-3 pb-3 text-center">Menghaluskan dan mencerahkan kulit dengan bahan alami</p>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
         <div class="service-card">
           <img src="images/scrub.jpeg" class="our-service-img" alt="Scrub">
           <h5>Scrub</h5>
           <p class="px-3 pb-3 text-center">Mengangkat sel kulit mati untuk kulit lebih sehat</p>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
         <div class="service-card">
           <img src="images/facial.jpeg" class="our-service-img" alt="Facial">
           <h5>Facial</h5>
@@ -466,12 +528,12 @@
 </section>
 
 <!-- Gallery -->
-<section id="gallery" class="gallery-section">
+<section id="gallery" class="gallery-section parallax" style="background-image: linear-gradient(rgba(105, 186, 37, 0.9), rgba(105, 186, 37, 0.9)), url('images/gallery-bg.jpg');">
   <div class="container">
-    <h2>Galeri</h2>
-    <p class="text-white mb-5">Lihat suasana dan proses pemijatan di Suci Massage</p>
+    <h2 data-aos="fade-up">Galeri</h2>
+    <p class="text-white mb-5" data-aos="fade-up" data-aos-delay="100">Lihat suasana dan proses pemijatan di Suci Massage</p>
     
-    <div class="swiper">
+    <div class="swiper" data-aos="fade-up" data-aos-delay="200">
       <div class="swiper-wrapper">
         <div class="swiper-slide">
           <img src="images/galeri1.jpeg" alt="Proses Pijat 1">
@@ -496,12 +558,12 @@
 <!-- FAQ -->
 <section id="faq" class="py-5 bg-light">
   <div class="container">
-    <div class="text-center mb-5">
+    <div class="text-center mb-5" data-aos="fade-up">
       <h2 class="text-green">Pertanyaan Umum</h2>
       <p class="lead">Temukan jawaban untuk pertanyaan yang sering diajukan</p>
     </div>
     <div class="accordion" id="faqAccordion">
-      <div class="accordion-item mb-3 border-0 shadow-sm">
+      <div class="accordion-item mb-3 border-0 shadow-sm" data-aos="fade-up" data-aos-delay="100">
         <h2 class="accordion-header">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="false" aria-controls="faq1">
             <i class="fas fa-question-circle text-green me-2"></i> Apakah pijat bisa dipanggil ke rumah?
@@ -513,7 +575,7 @@
           </div>
         </div>
       </div>
-      <div class="accordion-item mb-3 border-0 shadow-sm">
+      <div class="accordion-item mb-3 border-0 shadow-sm" data-aos="fade-up" data-aos-delay="200">
         <h2 class="accordion-header">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
             <i class="fas fa-question-circle text-green me-2"></i> Berapa lama durasi pijat?
@@ -525,7 +587,7 @@
           </div>
         </div>
       </div>
-      <div class="accordion-item mb-3 border-0 shadow-sm">
+      <div class="accordion-item mb-3 border-0 shadow-sm" data-aos="fade-up" data-aos-delay="300">
         <h2 class="accordion-header">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
             <i class="fas fa-question-circle text-green me-2"></i> Apakah bisa pesan hari ini juga?
@@ -537,7 +599,7 @@
           </div>
         </div>
       </div>
-      <div class="accordion-item mb-3 border-0 shadow-sm">
+      <div class="accordion-item mb-3 border-0 shadow-sm" data-aos="fade-up" data-aos-delay="400">
         <h2 class="accordion-header">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
             <i class="fas fa-question-circle text-green me-2"></i> Apakah bisa untuk anak-anak?
@@ -549,7 +611,7 @@
           </div>
         </div>
       </div>
-      <div class="accordion-item mb-3 border-0 shadow-sm">
+      <div class="accordion-item mb-3 border-0 shadow-sm" data-aos="fade-up" data-aos-delay="500">
         <h2 class="accordion-header">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
             <i class="fas fa-question-circle text-green me-2"></i> Pembayaran bisa via apa saja?
@@ -568,12 +630,12 @@
 <!-- Testimoni -->
 <section id="testimoni" class="py-5">
   <div class="container">
-    <div class="text-center mb-5">
+    <div class="text-center mb-5" data-aos="fade-up">
       <h2 class="text-green">Testimoni Pelanggan</h2>
       <p class="lead">Apa kata mereka tentang Suci Massage</p>
     </div>
     <div class="row g-4">
-      <div class="col-md-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
         <div class="testimonial-card">
           <blockquote>
             Baru pertama kali coba tapi langsung ketagihan. Pegal langsung hilang! Terapisnya sangat profesional dan tempatnya bersih. Akan kembali lagi!
@@ -581,7 +643,7 @@
           </blockquote>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
         <div class="testimonial-card">
           <blockquote>
             Pelayanan ramah, tempat bersih, dan hasilnya luar biasa. Sudah 3 kali datang dan selalu puas. Teknik pijatnya benar-benar mengena di bagian yang pegal.
@@ -589,7 +651,7 @@
           </blockquote>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
         <div class="testimonial-card">
           <blockquote>
             Sudah 3 kali panggil, dan selalu puas! Fleksibel jadwalnya dan terapisnya datang tepat waktu. Hasil pijatan konsisten bagus setiap kali.
@@ -606,11 +668,11 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-8">
-        <div class="text-center mb-5">
+        <div class="text-center mb-5" data-aos="fade-up">
           <h2 class="text-green">Jadwalkan Pijat</h2>
           <p class="lead">Isi formulir berikut untuk memesan layanan kami</p>
         </div>
-        <form id="bookingForm">
+        <form id="bookingForm" data-aos="fade-up" data-aos-delay="100">
           <div class="row g-3">
             <div class="col-md-6">
               <div class="form-floating">
@@ -664,13 +726,13 @@
 <footer class="bg-primary-custom text-white pt-5 pb-3">
   <div class="container">
     <div class="row">
-      <div class="col-lg-4 mb-4 mb-lg-0">
+      <div class="col-lg-4 mb-4 mb-lg-0" data-aos="fade-up">
         <img src="images/logom3.png" class="footer-logo" alt="Logo Suci Massage"/>
         <h3 class="brand-font mb-3">Suci Massage</h3>
         <p>Layanan pijat tradisional profesional di Bandar Lampung untuk relaksasi dan penyembuhan.</p>
         <p class="mb-0">© 2025 Suci Massage. Semua hak dilindungi.</p>
       </div>
-      <div class="col-lg-4 mb-4 mb-lg-0">
+      <div class="col-lg-4 mb-4 mb-lg-0" data-aos="fade-up" data-aos-delay="100">
         <h4 class="mb-4">Kontak Kami</h4>
         <p><i class="fas fa-phone-alt me-2"></i> 0856-6428-5974</p>
         <p><i class="fas fa-envelope me-2"></i> suci41841@gmail.com</p>
@@ -681,7 +743,7 @@
           <a href="https://wa.me/6285664285974" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>
         </div>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
         <h4 class="mb-4">Lokasi Kami</h4>
         <div class="ratio ratio-16x9">
           <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.123456789012!2d105.12345678901234!3d-5.123456789012345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNcKwMDcnMjQuNCJTIDEwNcKwMDcnMjQuNCJF!5e0!3m2!1sen!2sid!4v1234567890123!5m2!1sen!2sid" allowfullscreen="" loading="lazy"></iframe>
@@ -702,8 +764,18 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 
 <script>
+  // Initialize AOS (Animate On Scroll)
+  AOS.init({
+    duration: 800,
+    easing: 'ease-in-out',
+    once: true,
+    offset: 100
+  });
+
   // Initialize Swiper
   const swiper = new Swiper('.swiper', {
     loop: true,
@@ -729,6 +801,34 @@
     } else {
       navbar.classList.remove('scrolled');
     }
+  });
+
+  // Activate scrollspy
+  const scrollSpy = new bootstrap.ScrollSpy(document.body, {
+    target: '.navbar',
+    offset: 100
+  });
+
+  // Add active class to nav links on scroll
+  const navLinks = document.querySelectorAll('.nav-link');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    
+    document.querySelectorAll('section').forEach(section => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.clientHeight;
+      
+      if (pageYOffset >= (sectionTop - 150)) {
+        current = section.getAttribute('id');
+      }
+    });
+    
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === `#${current}`) {
+        link.classList.add('active');
+      }
+    });
   });
 
   // Back to top button
@@ -789,6 +889,13 @@
         });
       }
     });
+  });
+
+  // Add parallax effect to hero section
+  window.addEventListener('scroll', function() {
+    const scrollPosition = window.pageYOffset;
+    const hero = document.querySelector('.hero');
+    hero.style.backgroundPositionY = scrollPosition * 0.5 + 'px';
   });
 </script>
 </body>
